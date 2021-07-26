@@ -1,1 +1,1 @@
-web: cd bin; ls
+web: cd bin/web-service-gin; ls
