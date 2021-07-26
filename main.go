@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 
@@ -28,6 +30,15 @@ func main() {
 	router.POST("/insertReward", m.InsertReward)
 	router.POST("/uploadReceipt", m.Upload)
 
-	router.Run()
+	router.Run(getPort())
 
+}
+
+func getPort() string {
+	var port = os.Getenv("PORT") // ----> (A)
+	if port == "" {
+		port = "8080"
+		fmt.Println("No Port In Heroku" + port)
+	}
+	return ":" + port // ----> (B)
 }
