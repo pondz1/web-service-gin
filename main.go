@@ -28,6 +28,6 @@ func main() {
 	router.POST("/insertReward", m.InsertReward)
 	router.POST("/uploadReceipt", m.Upload)
 
-	router.Run("localhost:8080")
+	router.Run()
 
 }
