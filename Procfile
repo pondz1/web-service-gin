@@ -1,1 +1,1 @@
-web: ./main.go
+web: chmod a+x ;./main.go
