@@ -74,11 +74,16 @@ func UpdateStatus(c *gin.Context, client *mongo.Client, receiptId string, lineId
 	if err != nil {
 		return err
 	}
+	fmt.Printf("receipt: %v\n", receipt)
 	if receipt.Status == "complete" {
 		return errors.New("error: status complete")
 	}
-	curser, err := collection.UpdateByID(context.TODO(),
-		bson.M{"_id": objID},
+	objID2, err := primitive.ObjectIDFromHex(receipt.ID.Hex())
+	if err != nil {
+		return err
+	}
+	curser, err := collection.UpdateOne(context.TODO(),
+		bson.M{"_id": objID2},
 		bson.M{"$set": bson.M{
 			"status": "complete",
 		}},
