@@ -23,7 +23,7 @@ func main() {
 	router.GET("/getReceipt/:id", m.GetReceiptByUserID)
 	router.POST("/insertUser", m.InsertUser)
 	router.POST("/updateUser", m.UpdateUser)
-	router.POST("/addUserPoint", m.UpdateUserPoint)
+	router.POST("/addUserPoint/:receipt", m.UpdateUserPoint)
 	router.POST("/insertProduct", m.InsertProduct)
 	router.POST("/insertReward", m.InsertReward)
 	router.POST("/uploadReceipt", m.Upload)

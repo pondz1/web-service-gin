@@ -124,6 +124,7 @@ func UpdateUser(c *gin.Context) {
 }
 
 func UpdateUserPoint(c *gin.Context) {
+	receiptid := c.Param("receipt")
 	var updateUser User
 	var updateUser2 User
 	if err := c.BindJSON(&updateUser); err != nil {
@@ -146,6 +147,11 @@ func UpdateUserPoint(c *gin.Context) {
 		return
 	}
 	point := updateUser2.Points + updateUser.Points
+	err = UpdateStatus(c, client, receiptid, updateUser.LineId)
+	if err != nil {
+		c.IndentedJSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
 	err = collection.FindOneAndUpdate(context.TODO(),
 		bson.M{"lineid": updateUser.LineId}, bson.M{"$set": bson.M{"points": point}}).Decode(&updateUser2)
 
@@ -153,6 +159,5 @@ func UpdateUserPoint(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadGateway, gin.H{"message": "update failed!"})
 		return
 	}
-	UpdateStatus(c, client, updateUser.LineId)
 	c.IndentedJSON(http.StatusCreated, gin.H{"message": "point added", "point": point})
 }

@@ -2,6 +2,8 @@ package model
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"net/http"
 	db "web-service-gin/database"
 
@@ -60,17 +62,34 @@ func Upload(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, gin.H{"message": "uploaded", "id": id})
 }
 
-func UpdateStatus(c *gin.Context, client *mongo.Client, lineid string) {
+func UpdateStatus(c *gin.Context, client *mongo.Client, receiptId string, lineId string) error {
 	var receipt Receipt
+	objID, err := primitive.ObjectIDFromHex(receiptId)
+	if err != nil {
+		return err
+	}
 	collection := client.Database(db.DB).Collection(db.RECEIPT)
-	err := collection.FindOneAndUpdate(context.TODO(),
-		bson.M{"lineid": lineid},
+	err = collection.FindOne(context.TODO(),
+		bson.M{"_id": objID, "lineid": lineId}).Decode(&receipt)
+	if err != nil {
+		return err
+	}
+	if receipt.Status == "complete" {
+		return errors.New("error: status complete")
+	}
+	curser, err := collection.UpdateByID(context.TODO(),
+		bson.M{"_id": objID},
 		bson.M{"$set": bson.M{
 			"status": "complete",
-		}}).Decode(&receipt)
+		}},
+	)
+	id := curser.UpsertedID
+	fmt.Printf("id: %v\n", id)
 	if err != nil {
-		c.IndentedJSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return err
 	}
+
+	return err
 }
 
 func GetReceipt(c *gin.Context) {
