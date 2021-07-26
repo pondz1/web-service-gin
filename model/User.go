@@ -13,9 +13,9 @@ import (
 type User struct {
 	ID         primitive.ObjectID `bson:"_id" json:"id,omitempty"`
 	LineId     string             `json:"lineid"`
-	Name       string             `json:"displayName"`
+	Name       string             `json:"name"`
 	Points     float64            `json:"points"`
-	PictureUrl string             `json:"pictureUrl"`
+	PictureUrl string             `json:"pictureurl"`
 }
 
 func GetUsers(c *gin.Context) {
@@ -113,7 +113,10 @@ func UpdateUser(c *gin.Context) {
 	collection := client.Database(db.DB).Collection(db.USER)
 	err2 := collection.FindOneAndUpdate(context.TODO(),
 		bson.M{"lineid": updateUser.LineId},
-		bson.M{"$set": updateUser}).Decode(&updateUser2)
+		bson.M{"$set": bson.M{
+			"name":       updateUser.Name,
+			"pictureurl": updateUser.PictureUrl,
+		}}).Decode(&updateUser2)
 
 	if err2 != nil {
 		c.IndentedJSON(http.StatusBadGateway, gin.H{"message": err2.Error()})
