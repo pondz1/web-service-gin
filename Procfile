@@ -1,1 +1,1 @@
-web: /bin/web-service-gin/main.go
+web: main
