@@ -1,1 +1,1 @@
-web: chmod a+x main.go; ./main.go
+web: cd bin; ls
