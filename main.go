@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	m "web-service-gin/model"
@@ -12,6 +13,9 @@ import (
 
 func main() {
 	router := gin.Default()
+
+	router.Use(cors.Default())
+
 	router.GET("/ping", func(c *gin.Context) {
 		c.IndentedJSON(http.StatusOK, gin.H{"massage": "Successfully connected and pinged."})
 	})
