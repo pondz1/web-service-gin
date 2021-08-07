@@ -1,5 +1,7 @@
 # web-service-gin
 
+BasePath /api/v1
+
 #### GET "/getuser" <br/>
 
 ```
