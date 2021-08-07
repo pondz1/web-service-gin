@@ -11,11 +11,32 @@ import (
 )
 
 type Product struct {
-	ID      primitive.ObjectID `bson:"_id" json:"_id,omitempty"`
+	ID      primitive.ObjectID `bson:"_id" json:"_id,omitempty" swaggerignore:"true"`
 	Point   float64            `json:"p_point"`
 	ProName string             `json:"p_name"`
 }
 
+type Response struct {
+	Code   int    `json:code`   // Response Code
+	Status string `json:status` // Response Status
+}
+
+type Example struct {
+	Id      string `json:id`      // Response Code
+	Message string `json:message` // Response Status
+}
+
+// InsertProduct godoc
+// @summary Insert Product
+// @description Insert product
+// @security ApiKeyAuth
+// @id InsertProduct
+// @accept json
+// @produce json
+// @param Product body Product true "Product data to be Insert"
+// @response 201 {object} Example "OK"
+// @response 400 {object} Example "Bad Request"
+// @Router /insertProduct [post]
 func InsertProduct(c *gin.Context) {
 	var newProduct Product
 	if err := c.BindJSON(&newProduct); err != nil {
