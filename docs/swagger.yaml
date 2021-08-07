@@ -1,0 +1,74 @@
+basePath: /api/v1
+definitions:
+  model.Example:
+    properties:
+      id:
+        description: Response Code
+        type: string
+      message:
+        description: Response Status
+        type: string
+    type: object
+  model.Product:
+    properties:
+      p_name:
+        type: string
+      p_point:
+        type: number
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /insertProduct:
+    post:
+      consumes:
+      - application/json
+      description: Insert product
+      operationId: InsertProduct
+      parameters:
+      - description: Product data to be Insert
+        in: body
+        name: Product
+        required: true
+        schema:
+          $ref: '#/definitions/model.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Example'
+      security:
+      - ApiKeyAuth: []
+      summary: Insert Product
+  /ping:
+    get:
+      description: Health checking for the service
+      operationId: ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Health Check
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+  BasicAuth:
+    type: basic
+swagger: "2.0"
